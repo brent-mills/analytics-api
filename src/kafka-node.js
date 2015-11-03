@@ -15,39 +15,30 @@ client = new Client(process.env.ZK_IP + ':2181');
 var producer = new Producer(client);
 var app = express();
 app.set('port', 8125);
+var bodyParser = require('body-parser')
+app.use( bodyParser.json() );
 
 producer.on('ready', function() {
 console.log('Ready\n');
 });
 
 //======================================//
+app.use(function(err, req, res, next) {
+    console.error(err);
+    res.send("error in post body");
+});
 
 app.post('/v1/import', function(req, res) {
-    var body = '';
+    var body = req.body;
+    console.log(body)
 
-    req.on('data', function(chunk) {
-        body += chunk;
-    });
-
-    req.on('end', function(){
-
-        var data = JSON.parse(body);
-        console.log(data)
-        var batchSize = data.batch.length;
-
-        for(i = 0; i < batchSize; i++){
-
-            var theEvent = data.batch[i];
-            console.log('/*** Sending Event ***/');
-            console.log("Item " + i + " in batch    " + JSON.stringify(data.batch[i]) + '\n'); 
-            producer.send([ {topic: 'uShip.Events', messages: JSON.stringify(data.batch[i]), partition: 0}],
-                function(err, data) {
-                    if (err) console.log("ERROR => " + err);      
-                }
-            )
-        }
-
-    });
+        console.log('/*** Sending Event ***/');
+        producer.send([ {topic: 'uShip.Events', messages: JSON.stringify(body), partition: 0}],
+            function(err, body) {
+                if (err) console.log("ERROR => " + err);      
+            }
+        )
+        res.end("yes");
 });
 
 http.createServer(app).listen(app.get('port'), function(){
