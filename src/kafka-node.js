@@ -10,7 +10,7 @@ var util = require('util');
 var kafka = require('kafka-node');
 Producer = kafka.Producer,
 Client = kafka.Client,
-client = new Client('dockerrepo:2181');
+client = new Client(process.env.ZK_IP + ':2181');
 
 var producer = new Producer(client);
 var app = express();

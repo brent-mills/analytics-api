@@ -1,17 +1,16 @@
-FROM dockerrepo:5000/centos-template
+FROM alpine
 
-MAINTAINER BMills
-
-ENV NODE_SRC /usr/local/src/node
+# ENV NODE_SRC /usr/local/src/node
 
 # install node and npm
-RUN yum -y install nodejs npm
+RUN apk update
+RUN apk add bash nodejs g++ python make
 
 # create a node directory
-RUN mkdir /usr/local/src/node/
-
-# install base packages for node in the correct directory
+RUN mkdir -p /usr/local/src/node/
 WORKDIR /usr/local/src/node/
+
+# install base packages for node
 RUN npm install express kafka-node
 
 # add our .js files to directory
