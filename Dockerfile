@@ -11,7 +11,7 @@ RUN mkdir -p /usr/local/src/node/
 WORKDIR /usr/local/src/node/
 
 # install base packages for node
-RUN npm install express kafka-node
+RUN npm install express kafka-node body-parser
 
 # add our .js files to directory
 ADD ./src /usr/local/src/node/
