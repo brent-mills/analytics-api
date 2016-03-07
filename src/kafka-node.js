@@ -29,16 +29,16 @@ app.use(function(err, req, res, next) {
 });
 
 app.post('/v1/import', function(req, res) {
-    var body = req.body.batch;
-    //console.log(body)
+    var batch = req.body.batch;
+    //console.log(batch)
 
     //console.log('/*** Sending Events ***/');
 
-    var content = [];
-    for (var i = 0; i < body.length; i++) {
-        content[i] = {topic: 'uShip.Events', messages: JSON.stringify(body[i]), partition: 0};
+    var messages = [];
+    for (var i = 0; i < batch.length; i++) {
+        messages[i] = JSON.stringify(batch[i]);
     }
-    producer.send(content,
+    producer.send([{topic: 'uShip.Events', messages: messages, partition: 0}],
         function(err, body) {
             //if (err) console.log("ERROR => " + err);
         }
