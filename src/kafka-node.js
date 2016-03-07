@@ -19,28 +19,29 @@ var bodyParser = require('body-parser')
 app.use( bodyParser.json() );
 
 producer.on('ready', function() {
-console.log('Ready\n');
+    //console.log('Ready\n');
 });
 
 //======================================//
 app.use(function(err, req, res, next) {
-    console.error(err);
+    //console.error(err);
     res.send("error in post body");
 });
 
 app.post('/v1/import', function(req, res) {
-    var body = req.body;
-    console.log(body)
+    var body = req.body.batch;
+    //console.log(body)
 
-        console.log('/*** Sending Event ***/');
-        producer.send([ {topic: 'uShip.Events', messages: JSON.stringify(body), partition: 0}],
-            function(err, body) {
-                if (err) console.log("ERROR => " + err);      
-            }
-        )
-        res.end("yes");
+    //console.log('/*** Sending Events ***/');
+
+    producer.send([ {topic: 'uShip.Events', messages: JSON.stringify(body), partition: 0}],
+        function(err, body) {
+            //if (err) console.log("ERROR => " + err);
+        }
+    );
+    res.end("yes");
 });
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+  //console.log('Express server listening on port ' + app.get('port'));
 });
