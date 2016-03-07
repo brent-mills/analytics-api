@@ -34,7 +34,11 @@ app.post('/v1/import', function(req, res) {
 
     //console.log('/*** Sending Events ***/');
 
-    producer.send([ {topic: 'uShip.Events', messages: JSON.stringify(body), partition: 0}],
+    var content = [];
+    for (var i = 0; i < body.length; i++) {
+        content[i] = {topic: 'uShip.Events', messages: JSON.stringify(body[i]), partition: 0};
+    }
+    producer.send(content,
         function(err, body) {
             //if (err) console.log("ERROR => " + err);
         }
@@ -43,5 +47,5 @@ app.post('/v1/import', function(req, res) {
 });
 
 http.createServer(app).listen(app.get('port'), function(){
-  //console.log('Express server listening on port ' + app.get('port'));
+  console.log('Express server listening on port ' + app.get('port'));
 });
