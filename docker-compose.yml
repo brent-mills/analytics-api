@@ -1,0 +1,19 @@
+web:
+  build: .
+  ports:
+   - "18125:8125"
+  environment:
+   - ZK_HOST=zookeeper01.cloud.uship.com
+zookeeper:
+  image: bmills/zookeeper
+  ports:
+   - "2181:2181"
+kafka:
+  image: bmills/kafka
+  ports:
+   - "9092:9092"
+  volumes:
+   - kafka:/tmp/kafka-logs/
+  environment:
+   - ZK_HOST=zookeeper01.cloud.uship.com
+   - KAFKA_HOST=kafka01.cloud.uship.com
