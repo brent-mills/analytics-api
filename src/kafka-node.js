@@ -34,9 +34,15 @@ app.post('/v1/import', function(req, res) {
 
     //console.log('/*** Sending Events ***/');
 
-    var messages = [];
-    for (var i = 0; i < batch.length; i++) {
-        messages[i] = JSON.stringify(batch[i]);
+    var messages;
+    if (batch) {
+        messages = [];
+        for (var i = 0; i < batch.length; i++) {
+            messages[i] = JSON.stringify(batch[i]);
+        }
+    }
+    else {
+        messages = [req.body];
     }
     producer.send([{topic: 'uShip.Events', messages: messages, partition: 0}],
         function(err, body) {
