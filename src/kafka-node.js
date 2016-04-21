@@ -42,7 +42,7 @@ app.post('/v1/import', function(req, res) {
         }
     }
     else {
-        messages = [req.body];
+        messages = [JSON.stringify(req.body)];
     }
     producer.send([{topic: 'uShip.Events', messages: messages, partition: 0}],
         function(err, body) {
